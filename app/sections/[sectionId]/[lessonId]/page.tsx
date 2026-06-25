@@ -199,7 +199,19 @@ export default function LessonPage() {
       </Link>
 
       <div className="mt-4 flex flex-col items-center gap-4 lg:flex-row lg:items-start lg:justify-center">
-        <div className="flex flex-row items-start gap-3">
+        <div className="flex flex-col items-center gap-2">
+          <button
+            onClick={handleHint}
+            disabled={!isUserTurn || isComplete}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-accent text-white shadow-lg transition-all hover:opacity-80 active:opacity-60 disabled:invisible"
+            aria-label="Show hint"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+              <path d="M9 18h6" />
+              <path d="M10 22h4" />
+              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+            </svg>
+          </button>
           <ChessBoard
             game={game}
             onMove={handleMove}
@@ -210,19 +222,6 @@ export default function LessonPage() {
             userColor={lesson.userColor}
             hintMove={hintMove}
           />
-
-          <button
-            onClick={handleHint}
-            disabled={!isUserTurn || isComplete}
-            className="mt-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-white shadow-lg transition-all hover:opacity-80 active:opacity-60 disabled:invisible"
-            aria-label="Show hint"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-              <path d="M9 18h6" />
-              <path d="M10 22h4" />
-              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
-            </svg>
-          </button>
         </div>
 
         <div className="flex w-full max-w-[380px] flex-col gap-4">
