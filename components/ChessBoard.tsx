@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { getLegalMoves } from '@/lib/chess';
 import { Chess } from 'chess.js';
@@ -16,6 +16,9 @@ type ChessBoardProps = {
   hintMove?: { from: string; to: string } | null;
 };
 
+const dotStyle = 'radial-gradient(circle at center, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.25) 22%, transparent 23%, transparent 100%)';
+const ringStyle = 'radial-gradient(circle at center, transparent 0%, transparent 62%, rgba(0,0,0,0.25) 63%, rgba(0,0,0,0.25) 100%)';
+
 export default function ChessBoard({
   game,
   onMove,
@@ -26,7 +29,14 @@ export default function ChessBoard({
   userColor,
   hintMove = null,
 }: ChessBoardProps) {
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+
   const boardOrientation = flipped ? (orientation === 'white' ? 'black' : 'white') : orientation;
+
+  const legalSquares = useMemo(() => {
+    if (!selectedSquare) return [];
+    return getLegalMoves(game, selectedSquare);
+  }, [game, selectedSquare]);
 
   const squareStyles = useMemo(() => {
     const styles: Record<string, React.CSSProperties> = {};
@@ -40,8 +50,21 @@ export default function ChessBoard({
       styles[hintMove.from] = { backgroundColor: hintColor };
       styles[hintMove.to] = { backgroundColor: hintColor };
     }
+    if (selectedSquare && !disabled) {
+      styles[selectedSquare] = {
+        ...styles[selectedSquare],
+        backgroundColor: 'rgba(246, 246, 105, 0.55)',
+      };
+      for (const sq of legalSquares) {
+        const piece = game.get(sq as any);
+        styles[sq] = {
+          ...styles[sq],
+          background: piece ? ringStyle : dotStyle,
+        };
+      }
+    }
     return styles;
-  }, [lastMove, hintMove]);
+  }, [lastMove, hintMove, selectedSquare, legalSquares, disabled, game]);
 
   const arrows = useMemo(() => {
     if (!hintMove) return [];
@@ -63,10 +86,39 @@ export default function ChessBoard({
       if (disabled || !targetSquare) return false;
       const legalMoves = getLegalMoves(game, sourceSquare);
       if (!legalMoves.includes(targetSquare)) return false;
+      setSelectedSquare(null);
       onMove(sourceSquare, targetSquare);
       return true;
     },
     [disabled, game, onMove]
+  );
+
+  const onSquareClick = useCallback(
+    ({ square }: { square: string }) => {
+      if (disabled) return;
+      const piece = game.get(square as any);
+      const turn = game.turn();
+      const activeColor = userColor ?? (orientation === 'white' ? 'w' : 'b');
+
+      if (selectedSquare) {
+        if (square === selectedSquare) {
+          setSelectedSquare(null);
+          return;
+        }
+        if (legalSquares.includes(square)) {
+          setSelectedSquare(null);
+          onMove(selectedSquare, square);
+          return;
+        }
+      }
+
+      if (piece && piece.color === turn && piece.color === activeColor) {
+        setSelectedSquare(square);
+      } else {
+        setSelectedSquare(null);
+      }
+    },
+    [disabled, game, selectedSquare, legalSquares, onMove, userColor, orientation]
   );
 
   return (
@@ -80,6 +132,7 @@ export default function ChessBoard({
             allowDragging: !disabled,
             canDragPiece,
             onPieceDrop,
+            onSquareClick,
             squareStyles,
             arrows,
             showAnimations: false,
