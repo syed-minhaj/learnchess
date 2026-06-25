@@ -19,9 +19,9 @@ export default function SectionCard({ section, lessons, progress }: SectionCardP
         <div className="flex items-start gap-4">
           <span className="mt-1 text-3xl">{section.icon}</span>
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-white">{section.title}</h3>
-            <p className="mt-1 text-sm text-zinc-400 line-clamp-2">{section.description}</p>
-            <div className="mt-3 flex items-center gap-3 text-xs text-zinc-500">
+            <h3 className="text-[17px] font-semibold text-fg">{section.title}</h3>
+            <p className="mt-1 text-sm text-muted line-clamp-2">{section.description}</p>
+            <div className="mt-3 flex items-center gap-3 text-xs text-muted">
               <span>{lessons.length} lessons</span>
               <span>·</span>
               <span>

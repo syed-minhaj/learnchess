@@ -4,16 +4,16 @@ type BadgeProps = {
 };
 
 const colors: Record<string, string> = {
-  beginner: 'bg-emerald-900/50 text-emerald-300 border-emerald-700/50',
-  intermediate: 'bg-amber-900/50 text-amber-300 border-amber-700/50',
-  advanced: 'bg-red-900/50 text-red-300 border-red-700/50',
-  default: 'bg-zinc-700 text-zinc-300 border-zinc-600',
+  beginner: 'bg-success/15 text-success border-success/30',
+  intermediate: 'bg-warn/15 text-warn border-warn/30',
+  advanced: 'bg-danger/15 text-danger border-danger/30',
+  default: 'bg-elevated text-muted border-border',
 };
 
 export default function Badge({ children, variant = 'default' }: BadgeProps) {
   return (
     <span
-      className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize ${colors[variant] || colors.default}`}
+      className={`inline-block rounded-[6px] border px-2.5 py-0.5 text-xs font-medium capitalize ${colors[variant] || colors.default}`}
     >
       {children}
     </span>

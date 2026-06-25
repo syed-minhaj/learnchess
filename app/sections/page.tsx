@@ -10,8 +10,8 @@ export default function SectionsPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
-      <h1 className="text-3xl font-bold text-white">All Lessons</h1>
-      <p className="mt-2 text-zinc-400">
+      <h1 className="text-[28px] font-bold text-fg">All Lessons</h1>
+      <p className="mt-2 text-muted">
         Choose a section to begin your chess training. Track your progress across 8 sections.
       </p>
 

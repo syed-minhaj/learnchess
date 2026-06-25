@@ -46,18 +46,18 @@ export default function QuizPanel({ questions, lessonId, onComplete }: QuizPanel
   const isLast = index + 1 >= questions.length;
 
   return (
-    <div className="rounded-lg border border-zinc-700/50 bg-zinc-800/60 p-4">
+    <div className="rounded-[12px] border border-border bg-elevated p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="text-sm font-medium text-zinc-300">
+        <h3 className="text-sm font-medium text-fg">
           Quiz — {index + 1}/{questions.length}
         </h3>
-        <span className="text-xs text-zinc-500">
+        <span className="text-xs text-muted">
           {correct}/{showResult ? (selected === q.correctSan ? correct : correct) : correct} correct
         </span>
       </div>
 
       <div className="mx-auto mb-4 max-w-[280px]">
-        <div className="aspect-square overflow-hidden rounded-lg">
+        <div className="aspect-square overflow-hidden shadow-lg shadow-black/10">
           <Chessboard
             options={{
               id: `quiz-board-${lessonId}`,
@@ -66,33 +66,33 @@ export default function QuizPanel({ questions, lessonId, onComplete }: QuizPanel
               allowDragging: false,
               showAnimations: false,
               showNotation: true,
-              darkSquareStyle: { backgroundColor: '#769656' },
-              lightSquareStyle: { backgroundColor: '#eeeed2' },
+              darkSquareStyle: { backgroundColor: '#779556' },
+              lightSquareStyle: { backgroundColor: '#EBECD0' },
               boardStyle: { borderRadius: '0', boxShadow: 'none' },
             }}
           />
         </div>
       </div>
 
-      <p className="mb-3 text-sm text-zinc-200">{q.prompt}</p>
+      <p className="mb-3 text-sm text-fg">{q.prompt}</p>
 
       <div className="space-y-2">
         {q.options.map((opt) => {
           const isCorrect = opt.san === q.correctSan;
           const isSelected = opt.san === selected;
-          let bg = 'bg-zinc-700/50 hover:bg-zinc-700 border-zinc-600/50';
-          if (showResult && isCorrect) bg = 'bg-emerald-900/40 border-emerald-600/50';
-          else if (showResult && isSelected && !isCorrect) bg = 'bg-red-900/40 border-red-600/50';
+          let bg = 'bg-surface border-border hover:bg-elevated';
+          if (showResult && isCorrect) bg = 'bg-success/15 border-success/40';
+          else if (showResult && isSelected && !isCorrect) bg = 'bg-danger/15 border-danger/40';
 
           return (
             <button
               key={opt.san}
               onClick={() => handleSelect(opt.san)}
               disabled={showResult}
-              className={`w-full rounded-lg border p-3 text-left text-sm transition-colors ${bg}`}
+              className={`w-full rounded-[12px] border p-3 text-left text-sm transition-colors ${bg}`}
             >
-              <span className="font-mono text-zinc-300">{opt.san}</span>
-              <span className="ml-2 text-zinc-400">{opt.label}</span>
+              <span className="font-mono text-fg tabular-nums">{opt.san}</span>
+              <span className="ml-2 text-muted">{opt.label}</span>
             </button>
           );
         })}
@@ -101,9 +101,9 @@ export default function QuizPanel({ questions, lessonId, onComplete }: QuizPanel
       {showResult && (
         <div className="mt-3">
           {selected === q.correctSan ? (
-            <p className="text-sm text-emerald-400">Correct! {q.explanation}</p>
+            <p className="text-sm text-success">Correct! {q.explanation}</p>
           ) : (
-            <p className="text-sm text-red-400">Incorrect. {q.explanation}</p>
+            <p className="text-sm text-danger">Incorrect. {q.explanation}</p>
           )}
           <Button onClick={handleNext} size="sm" className="mt-2">
             {isLast ? 'Finish Quiz' : 'Next Question'}

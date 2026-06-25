@@ -1,19 +1,60 @@
 @import "tailwindcss";
 
+:root {
+  --surface: #FAFAF9;
+  --elevated: #FFFFFF;
+  --fg: #1A1D1B;
+  --muted: #5C6660;
+  --inverse: #FAFAF9;
+  --border: #E3E5E0;
+  --accent: #3B7A57;
+  --accent-hover: #2E6147;
+  --warn: #D97706;
+  --danger: #DC2626;
+  --success: #16A34A;
+}
+
+.dark {
+  --surface: #15191C;
+  --elevated: #1E2328;
+  --fg: #FAFAF9;
+  --muted: #9CA3AF;
+  --inverse: #1A1D1B;
+  --border: #2A2F31;
+  --accent: #3B7A57;
+  --accent-hover: #4ADE80;
+  --warn: #FBBF24;
+  --danger: #F87171;
+  --success: #34D399;
+}
+
 @theme inline {
-  --color-background: #0d1117;
-  --color-foreground: #f0f6fc;
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-inverse: var(--inverse);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-board-light: #EBECD0;
+  --color-board-dark: #779556;
+  --color-board-highlight: #F6F669;
+  --color-board-check: #FF4D4D;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #30363d transparent;
+  scrollbar-color: var(--border) transparent;
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--surface);
+  color: var(--fg);
   font-family: var(--font-sans, Arial, Helvetica, sans-serif);
 }

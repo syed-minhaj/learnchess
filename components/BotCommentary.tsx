@@ -41,17 +41,17 @@ export default function BotCommentary({ text, isTyping = true }: BotCommentaryPr
   if (!text) return null;
 
   return (
-    <div className="rounded-lg border border-emerald-700/30 bg-emerald-900/20 p-4">
+    <div className="rounded-[12px] border border-accent/20 bg-accent/10 p-4">
       <div className="flex items-start gap-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-700/40 text-sm">
-          🤖
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent/20 text-sm">
+          ♟
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium text-emerald-400">Coach</p>
-          <p className="mt-1 text-sm leading-relaxed text-zinc-300">
+          <p className="text-sm font-medium text-accent">Coach</p>
+          <p className="mt-1 text-sm leading-relaxed text-fg">
             {displayed}
             {showCursor && displayed.length < (text?.length || 0) && (
-              <span className="ml-0.5 animate-pulse text-emerald-400">▌</span>
+              <span className="ml-0.5 animate-pulse text-accent">▌</span>
             )}
           </p>
         </div>

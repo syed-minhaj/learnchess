@@ -17,11 +17,11 @@ export default function Button({
   disabled = false,
   className = '',
 }: ButtonProps) {
-  const base = 'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed';
+  const base = 'inline-flex items-center justify-center gap-2 rounded-[12px] font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed';
   const variants = {
-    primary: 'bg-emerald-600 text-white hover:bg-emerald-500 active:bg-emerald-700',
-    secondary: 'bg-zinc-700 text-zinc-100 hover:bg-zinc-600 active:bg-zinc-800',
-    ghost: 'text-zinc-300 hover:bg-zinc-800 hover:text-white',
+    primary: 'bg-accent text-white hover:bg-accent-hover active:brightness-90',
+    secondary: 'bg-elevated text-fg border border-border hover:bg-surface active:brightness-95',
+    ghost: 'text-muted hover:text-fg hover:bg-elevated',
   };
   const sizes = {
     sm: 'px-3 py-1.5 text-sm',

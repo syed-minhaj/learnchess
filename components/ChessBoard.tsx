@@ -29,8 +29,9 @@ export default function ChessBoard({
   const squareStyles = useMemo(() => {
     const styles: Record<string, React.CSSProperties> = {};
     if (lastMove) {
-      styles[lastMove.from] = { backgroundColor: 'rgba(155, 199, 0, 0.41)' };
-      styles[lastMove.to] = { backgroundColor: 'rgba(155, 199, 0, 0.41)' };
+      const highlight = 'rgba(246, 246, 105, 0.41)';
+      styles[lastMove.from] = { backgroundColor: highlight };
+      styles[lastMove.to] = { backgroundColor: highlight };
     }
     return styles;
   }, [lastMove]);
@@ -58,7 +59,7 @@ export default function ChessBoard({
 
   return (
     <div className="mx-auto w-full max-w-[480px]">
-      <div className="aspect-square overflow-hidden rounded-lg shadow-lg shadow-black/30">
+      <div className="aspect-square overflow-hidden shadow-lg shadow-black/20">
         <Chessboard
           options={{
             id: 'chess-board',
@@ -70,8 +71,8 @@ export default function ChessBoard({
             squareStyles,
             showAnimations: false,
             showNotation: true,
-            darkSquareStyle: { backgroundColor: '#769656' },
-            lightSquareStyle: { backgroundColor: '#eeeed2' },
+            darkSquareStyle: { backgroundColor: '#779556' },
+            lightSquareStyle: { backgroundColor: '#EBECD0' },
             boardStyle: {
               borderRadius: '0',
               boxShadow: 'none',

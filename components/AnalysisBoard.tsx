@@ -10,7 +10,6 @@ export default function AnalysisBoard() {
   const [game, setGame] = useState(new Chess());
   const [fen, setFen] = useState(game.fen());
   const [history, setHistory] = useState<string[]>([]);
-  const [historyIndex, setHistoryIndex] = useState(-1);
   const [flipped, setFlipped] = useState(false);
   const [status, setStatus] = useState('');
   const gameRef = useRef(game);
@@ -19,7 +18,6 @@ export default function AnalysisBoard() {
     gameRef.current = g;
     setFen(g.fen());
     setHistory(g.history());
-    setHistoryIndex(g.history().length - 1);
     if (g.isCheckmate()) setStatus('Checkmate!');
     else if (g.isDraw()) setStatus('Draw');
     else if (g.isCheck()) setStatus('Check');
@@ -27,7 +25,7 @@ export default function AnalysisBoard() {
   }, []);
 
   const canDragPiece = useCallback(
-    ({ piece }: { piece: { pieceType: string } }) => true,
+    () => true,
     []
   );
 
@@ -52,7 +50,6 @@ export default function AnalysisBoard() {
     gameRef.current = g;
     setFen(g.fen());
     setHistory([]);
-    setHistoryIndex(-1);
     setStatus('White to move');
   };
 
@@ -86,15 +83,15 @@ export default function AnalysisBoard() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
       <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-white">Analysis Board</h1>
-        <p className="mt-1 text-sm text-zinc-400">
+        <h1 className="text-[20px] font-semibold text-fg">Analysis Board</h1>
+        <p className="mt-1 text-sm text-muted">
           Set up positions, play moves, and analyze freely.
         </p>
       </div>
 
       <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-center">
         <div className="w-full max-w-[480px]">
-          <div className="aspect-square overflow-hidden rounded-lg shadow-lg shadow-black/30">
+          <div className="aspect-square overflow-hidden shadow-lg shadow-black/20">
             <Chessboard
               options={{
                 id: 'analysis-board',
@@ -105,8 +102,8 @@ export default function AnalysisBoard() {
                 onPieceDrop,
                 showAnimations: false,
                 showNotation: true,
-                darkSquareStyle: { backgroundColor: '#769656' },
-                lightSquareStyle: { backgroundColor: '#eeeed2' },
+                darkSquareStyle: { backgroundColor: '#779556' },
+                lightSquareStyle: { backgroundColor: '#EBECD0' },
                 boardStyle: { borderRadius: '0', boxShadow: 'none' },
               }}
             />
@@ -114,8 +111,8 @@ export default function AnalysisBoard() {
         </div>
 
         <div className="flex w-full max-w-[320px] flex-col gap-4">
-          <div className="rounded-lg border border-zinc-700/50 bg-zinc-800/60 p-4 text-center">
-            <p className="text-sm font-medium text-zinc-200">{status}</p>
+          <div className="rounded-[12px] border border-border bg-elevated p-4 text-center">
+            <p className="text-sm font-medium text-fg">{status}</p>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -131,19 +128,19 @@ export default function AnalysisBoard() {
             <Button size="sm" variant="ghost" onClick={loadFen}>Load FEN</Button>
           </div>
 
-          <div className="rounded-lg border border-zinc-700/50 bg-zinc-800/60 p-3">
-            <h3 className="mb-2 text-xs font-medium text-zinc-500">Move History</h3>
+          <div className="rounded-[12px] border border-border bg-elevated p-3">
+            <h3 className="mb-2 text-xs font-medium text-muted">Move History</h3>
             <div className="max-h-40 overflow-y-auto">
               {history.length === 0 ? (
-                <p className="text-xs text-zinc-600">No moves yet.</p>
+                <p className="text-xs text-muted/60">No moves yet.</p>
               ) : (
-                <div className="font-mono text-xs text-zinc-300">
+                <div className="font-mono text-xs text-fg tabular-nums">
                   {Array.from({ length: Math.ceil(history.length / 2) }, (_, i) => {
                     const w = history[i * 2];
                     const b = history[i * 2 + 1];
                     return (
                       <div key={i} className="flex gap-2 py-0.5">
-                        <span className="w-6 text-zinc-500">{i + 1}.</span>
+                        <span className="w-6 text-muted">{i + 1}.</span>
                         <span>{w || ''}</span>
                         <span>{b || ''}</span>
                       </div>
@@ -154,9 +151,9 @@ export default function AnalysisBoard() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-zinc-700/50 bg-zinc-800/60 p-3">
-            <h3 className="mb-1 text-xs font-medium text-zinc-500">FEN</h3>
-            <p className="break-all font-mono text-xs text-zinc-400">{fen}</p>
+          <div className="rounded-[12px] border border-border bg-elevated p-3">
+            <h3 className="mb-1 text-xs font-medium text-muted">FEN</h3>
+            <p className="break-all font-mono text-xs text-muted tabular-nums">{fen}</p>
           </div>
         </div>
       </div>

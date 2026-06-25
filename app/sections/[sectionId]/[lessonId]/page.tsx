@@ -160,8 +160,8 @@ export default function LessonPage() {
   if (!lesson) {
     return (
       <div className="mx-auto max-w-4xl px-4 py-20 text-center">
-        <h1 className="text-2xl font-bold text-white">Lesson not found</h1>
-        <Link href="/sections" className="mt-4 inline-block text-emerald-400 hover:underline">
+        <h1 className="text-[20px] font-semibold text-fg">Lesson not found</h1>
+        <Link href="/sections" className="mt-4 inline-block text-accent hover:underline">
           ← Back to sections
         </Link>
       </div>
@@ -171,7 +171,7 @@ export default function LessonPage() {
   if (!game) {
     return (
       <div className="mx-auto max-w-4xl px-4 py-20 text-center">
-        <div className="animate-pulse text-zinc-400">Loading lesson...</div>
+        <div className="animate-pulse text-muted">Loading lesson...</div>
       </div>
     );
   }
@@ -180,7 +180,7 @@ export default function LessonPage() {
     <div className="mx-auto max-w-6xl px-4 py-8">
       <Link
         href={`/sections/${sectionId}`}
-        className="inline-flex items-center gap-1 text-sm text-zinc-400 hover:text-white"
+        className="inline-flex items-center gap-1 text-sm text-muted hover:text-fg"
       >
         ← Back to {sections.find((s) => s.id === sectionId)?.title || 'Lessons'}
       </Link>

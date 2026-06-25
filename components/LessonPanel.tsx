@@ -36,8 +36,8 @@ export default function LessonPanel({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h2 className="text-xl font-bold text-white">{lesson.title}</h2>
-        <p className="mt-1 text-sm text-zinc-400">{lesson.description}</p>
+        <h2 className="text-[20px] font-semibold text-fg">{lesson.title}</h2>
+        <p className="mt-1 text-sm text-muted">{lesson.description}</p>
       </div>
 
       <ProgressBar
@@ -47,14 +47,14 @@ export default function LessonPanel({
       />
 
       {isComplete && (
-        <div className="rounded-lg border border-emerald-700/30 bg-emerald-900/20 p-4 text-center">
-          <p className="text-lg font-bold text-emerald-400">Lesson Complete!</p>
-          <p className="mt-1 text-sm text-zinc-400">
+        <div className="rounded-[12px] border border-success/20 bg-success/10 p-4 text-center">
+          <p className="text-[20px] font-semibold text-success">Lesson Complete!</p>
+          <p className="mt-1 text-sm text-muted">
             You played through {moves.length} move{moves.length !== 1 ? 's' : ''}.
           </p>
 
           {quizScore !== undefined && (
-            <p className="mt-1 text-sm text-amber-300">
+            <p className="mt-1 text-sm text-warn">
               Quiz: {quizScore}/{lesson.quiz?.length || 0}
             </p>
           )}
@@ -72,41 +72,41 @@ export default function LessonPanel({
           )}
 
           {!onNextLesson && (
-            <p className="mt-2 text-xs text-zinc-500">This is the last lesson in this section.</p>
+            <p className="mt-2 text-xs text-muted">This is the last lesson in this section.</p>
           )}
         </div>
       )}
 
       {userExplanation && (
-        <div className="rounded-lg border border-emerald-700/30 bg-emerald-900/20 p-3">
-          <p className="text-xs font-medium text-emerald-400">Your move</p>
-          <p className="mt-0.5 text-sm text-emerald-200">{userExplanation}</p>
+        <div className="rounded-[12px] border border-accent/20 bg-accent/10 p-3">
+          <p className="text-xs font-medium text-accent">Your move</p>
+          <p className="mt-0.5 text-sm text-fg">{userExplanation}</p>
         </div>
       )}
 
       {botExplanation && (
-        <div className="rounded-lg border border-blue-700/30 bg-blue-900/20 p-3">
-          <p className="text-xs font-medium text-blue-400">Coach</p>
-          <p className="mt-0.5 text-sm text-blue-200">{botExplanation}</p>
+        <div className="rounded-[12px] border border-accent/20 bg-accent/5 p-3">
+          <p className="text-xs font-medium text-accent">Coach</p>
+          <p className="mt-0.5 text-sm text-fg">{botExplanation}</p>
         </div>
       )}
 
       {isUserTurn && !isComplete && (
-        <div className="rounded-lg border border-amber-700/30 bg-amber-900/20 p-3 text-center text-sm text-amber-300">
+        <div className="rounded-[12px] border border-border bg-elevated p-3 text-center text-sm text-accent">
           Your turn — make a move on the board.
         </div>
       )}
 
       {!isUserTurn && !isComplete && (
-        <div className="rounded-lg border border-zinc-700/30 bg-zinc-800/50 p-3 text-center text-sm text-zinc-400">
+        <div className="rounded-[12px] border border-border bg-elevated p-3 text-center text-sm text-muted">
           Coach is thinking...
         </div>
       )}
 
       {hint && !isComplete && (
-        <div className="rounded-lg border border-blue-700/30 bg-blue-900/20 p-3">
-          <p className="text-xs font-medium text-blue-400">Hint</p>
-          <p className="mt-0.5 text-sm text-blue-200">{hint}</p>
+        <div className="rounded-[12px] border border-warn/20 bg-warn/10 p-3">
+          <p className="text-xs font-medium text-warn">Hint</p>
+          <p className="mt-0.5 text-sm text-fg">{hint}</p>
         </div>
       )}
 
@@ -117,7 +117,7 @@ export default function LessonPanel({
       )}
 
       <div>
-        <h3 className="mb-2 text-sm font-medium text-zinc-400">Move History</h3>
+        <h3 className="mb-2 text-sm font-medium text-muted">Move History</h3>
         <MoveHistory moves={moves} />
       </div>
     </div>
