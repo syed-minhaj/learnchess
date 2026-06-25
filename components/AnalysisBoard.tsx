@@ -7,7 +7,7 @@ import { getLegalMoves } from '@/lib/chess';
 import Button from './ui/Button';
 
 export default function AnalysisBoard() {
-  const [game, setGame] = useState(new Chess());
+  const [game, setGame] = useState(() => new Chess());
   const [fen, setFen] = useState(game.fen());
   const [history, setHistory] = useState<string[]>([]);
   const [flipped, setFlipped] = useState(false);

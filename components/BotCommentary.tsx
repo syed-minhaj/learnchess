@@ -25,10 +25,14 @@ export default function BotCommentary({ text, isTyping = true }: BotCommentaryPr
     setDisplayed('');
     let i = 0;
     const interval = setInterval(() => {
-      i++;
-      setDisplayed(text.slice(0, i));
-      if (i >= text.length) clearInterval(interval);
-    }, 20);
+      i += 3;
+      if (i >= text.length) {
+        setDisplayed(text);
+        clearInterval(interval);
+      } else {
+        setDisplayed(text.slice(0, i));
+      }
+    }, 16);
 
     return () => clearInterval(interval);
   }, [text, isTyping]);

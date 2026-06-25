@@ -87,7 +87,7 @@ export default function LessonPage() {
           setHint(lesson.mainLine[newIdx]?.hint || null);
         }
       } catch {}
-    }, 800);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [lesson, game, isUserTurn, isComplete, moveIndex]);

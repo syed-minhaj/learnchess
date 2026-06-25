@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Chess } from 'chess.js';
 import { QuizQuestion } from '@/types';
 import { Chessboard } from 'react-chessboard';
@@ -24,7 +24,7 @@ export default function QuizPanel({ questions, lessonId, onComplete }: QuizPanel
     return null;
   }
 
-  const game = new Chess(q.fen);
+  const game = useMemo(() => new Chess(q.fen), [q.fen]);
 
   const handleSelect = (san: string) => {
     if (showResult) return;

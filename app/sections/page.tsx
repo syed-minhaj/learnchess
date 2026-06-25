@@ -1,12 +1,23 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import { sections } from '@/data/sections';
 import { getSectionLessons } from '@/data/registry';
 import SectionCard from '@/components/SectionCard';
-import { loadProgress } from '@/lib/store';
+import { loadProgress, defaultProgress } from '@/lib/store';
+import { UserProgress } from '@/types';
 
 export default function SectionsPage() {
-  const progress = loadProgress();
+  const [progress, setProgress] = useState<UserProgress>(defaultProgress);
+
+  useEffect(() => {
+    setProgress(loadProgress());
+  }, []);
+
+  const sectionLessons = useMemo(
+    () => Object.fromEntries(sections.map((s) => [s.id, getSectionLessons(s.id)])),
+    []
+  );
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -16,17 +27,14 @@ export default function SectionsPage() {
       </p>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2">
-        {sections.map((section) => {
-          const lessons = getSectionLessons(section.id);
-          return (
-            <SectionCard
-              key={section.id}
-              section={section}
-              lessons={lessons}
-              progress={progress}
-            />
-          );
-        })}
+        {sections.map((section) => (
+          <SectionCard
+            key={section.id}
+            section={section}
+            lessons={sectionLessons[section.id]}
+            progress={progress}
+          />
+        ))}
       </div>
     </div>
   );
