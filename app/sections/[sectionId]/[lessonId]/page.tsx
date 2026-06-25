@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Chess } from 'chess.js';
 import { sections } from '@/data/sections';
-import { getLessonById, getSectionLessons } from '@/data/registry';
+import { getLessonById } from '@/data/registry';
 import { MoveRecord } from '@/types';
 import ChessBoard from '@/components/ChessBoard';
 import LessonPanel from '@/components/LessonPanel';
@@ -24,6 +24,7 @@ export default function LessonPage() {
   const [moveIndex, setMoveIndex] = useState(0);
   const [moves, setMoves] = useState<MoveRecord[]>([]);
   const [hint, setHint] = useState<string | null>(null);
+  const [hintMove, setHintMove] = useState<{ from: string; to: string } | null>(null);
   const [isUserTurn, setIsUserTurn] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
@@ -42,6 +43,7 @@ export default function LessonPage() {
     setMoveIndex(0);
     setMoves([]);
     setHint(null);
+    setHintMove(null);
     setIsComplete(false);
     setShowQuiz(false);
     setLastMove(null);
@@ -121,6 +123,7 @@ export default function LessonPage() {
         setUserExplanation(expectedMove.explanation || null);
         setBotExplanation(null);
         setHint(null);
+        setHintMove(null);
         setIsUserTurn(false);
         setMoveIndex(idx + 1);
       } catch {
@@ -134,6 +137,16 @@ export default function LessonPage() {
     if (!lesson || isComplete) return;
     const m = lesson.mainLine[moveIndex];
     if (m?.hint) setHint(m.hint);
+
+    const g = gameRef.current;
+    if (!g) return;
+    try {
+      const preview = new Chess(g.fen());
+      const result = preview.move(m.san);
+      if (result) {
+        setHintMove({ from: result.from, to: result.to });
+      }
+    } catch {}
   }, [lesson, isComplete, moveIndex]);
 
   const handleQuizComplete = useCallback(
@@ -185,18 +198,34 @@ export default function LessonPage() {
         ← Back to {sections.find((s) => s.id === sectionId)?.title || 'Lessons'}
       </Link>
 
-      <div className="mt-4 grid gap-8 lg:grid-cols-[1fr_380px]">
-        <ChessBoard
-          game={game}
-          onMove={handleMove}
-          orientation="white"
-          disabled={isComplete || !isUserTurn}
-          lastMove={lastMove}
-          flipped={lesson.userColor === 'b'}
-          userColor={lesson.userColor}
-        />
+      <div className="mt-4 flex flex-col items-center gap-4 lg:flex-row lg:items-start lg:justify-center">
+        <div className="flex flex-row items-start gap-3">
+          <ChessBoard
+            game={game}
+            onMove={handleMove}
+            orientation="white"
+            disabled={isComplete || !isUserTurn}
+            lastMove={lastMove}
+            flipped={lesson.userColor === 'b'}
+            userColor={lesson.userColor}
+            hintMove={hintMove}
+          />
 
-        <div className="flex flex-col gap-4">
+          <button
+            onClick={handleHint}
+            disabled={!isUserTurn || isComplete}
+            className="mt-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-white shadow-lg transition-all hover:opacity-80 active:opacity-60 disabled:invisible"
+            aria-label="Show hint"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+              <path d="M9 18h6" />
+              <path d="M10 22h4" />
+              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex w-full max-w-[380px] flex-col gap-4">
           <LessonPanel
             lesson={lesson}
             moves={moves}

@@ -13,6 +13,7 @@ type ChessBoardProps = {
   lastMove?: { from: string; to: string } | null;
   flipped?: boolean;
   userColor?: 'w' | 'b';
+  hintMove?: { from: string; to: string } | null;
 };
 
 export default function ChessBoard({
@@ -23,6 +24,7 @@ export default function ChessBoard({
   lastMove = null,
   flipped = false,
   userColor,
+  hintMove = null,
 }: ChessBoardProps) {
   const boardOrientation = flipped ? (orientation === 'white' ? 'black' : 'white') : orientation;
 
@@ -33,8 +35,18 @@ export default function ChessBoard({
       styles[lastMove.from] = { backgroundColor: highlight };
       styles[lastMove.to] = { backgroundColor: highlight };
     }
+    if (hintMove) {
+      const hintColor = 'rgba(59, 122, 87, 0.35)';
+      styles[hintMove.from] = { backgroundColor: hintColor };
+      styles[hintMove.to] = { backgroundColor: hintColor };
+    }
     return styles;
-  }, [lastMove]);
+  }, [lastMove, hintMove]);
+
+  const arrows = useMemo(() => {
+    if (!hintMove) return [];
+    return [{ startSquare: hintMove.from, endSquare: hintMove.to, color: '#3B7A57' }];
+  }, [hintMove]);
 
   const canDragPiece = useCallback(
     ({ piece }: { piece: { pieceType: string } }) => {
@@ -69,6 +81,7 @@ export default function ChessBoard({
             canDragPiece,
             onPieceDrop,
             squareStyles,
+            arrows,
             showAnimations: false,
             showNotation: true,
             darkSquareStyle: { backgroundColor: '#779556' },

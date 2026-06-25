@@ -47,8 +47,8 @@ export default function BotCommentary({ text, isTyping = true }: BotCommentaryPr
           ♟
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium text-accent">Coach</p>
-          <p className="mt-1 text-sm leading-relaxed text-fg">
+          <p className="text-[13px] font-medium text-accent">Coach</p>
+          <p className="mt-1 text-[14px] leading-relaxed text-text-secondary">
             {displayed}
             {showCursor && displayed.length < (text?.length || 0) && (
               <span className="ml-0.5 animate-pulse text-accent">▌</span>
