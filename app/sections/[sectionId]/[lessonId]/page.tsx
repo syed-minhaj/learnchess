@@ -11,6 +11,7 @@ import ChessBoard from '@/components/ChessBoard';
 import LessonPanel from '@/components/LessonPanel';
 import QuizPanel from '@/components/QuizPanel';
 import { loadProgress, completeLesson, setCurrentLesson } from '@/lib/store';
+import { useSpeech } from '@/hooks/useSpeech';
 
 export default function LessonPage() {
   const params = useParams();
@@ -34,6 +35,8 @@ export default function LessonPage() {
   const [quizScore, setQuizScore] = useState<number | undefined>(undefined);
 
   const gameRef = useRef<Chess | null>(null);
+
+  const { speak, toggleMute, isMuted, isSpeaking, isSpeakingRef } = useSpeech();
 
   useEffect(() => {
     if (!lesson) return;
@@ -59,6 +62,8 @@ export default function LessonPage() {
 
   useEffect(() => {
     if (!lesson || !game || isUserTurn || isComplete) return;
+
+    if (isSpeakingRef.current) return;
 
     const timer = setTimeout(() => {
       const g = gameRef.current;
@@ -90,7 +95,7 @@ export default function LessonPage() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [lesson, game, isUserTurn, isComplete, moveIndex]);
+  }, [lesson, game, isUserTurn, isComplete, moveIndex, isSpeaking]);
 
   const handleMove = useCallback(
     (from: string, to: string) => {
@@ -136,7 +141,10 @@ export default function LessonPage() {
   const handleHint = useCallback(() => {
     if (!lesson || isComplete) return;
     const m = lesson.mainLine[moveIndex];
-    if (m?.hint) setHint(m.hint);
+    if (m?.hint) {
+      setHint(m.hint);
+      if (!isMuted) speak(m.hint);
+    }
 
     const g = gameRef.current;
     if (!g) return;
@@ -147,7 +155,7 @@ export default function LessonPage() {
         setHintMove({ from: result.from, to: result.to });
       }
     } catch {}
-  }, [lesson, isComplete, moveIndex]);
+  }, [lesson, isComplete, moveIndex, isMuted, speak]);
 
   const handleQuizComplete = useCallback(
     (score: number) => {
@@ -160,6 +168,14 @@ export default function LessonPage() {
     },
     [lessonId]
   );
+
+  useEffect(() => {
+    if (botExplanation && !isMuted) speak(botExplanation);
+  }, [botExplanation]);
+
+  useEffect(() => {
+    if (userExplanation && !isMuted) speak(userExplanation);
+  }, [userExplanation]);
 
   const nextLesson = useMemo(() => {
     if (!lesson) return null;
@@ -237,6 +253,8 @@ export default function LessonPage() {
             quizScore={quizScore !== null ? quizScore : undefined}
             userExplanation={userExplanation}
             botExplanation={botExplanation}
+            isMuted={isMuted}
+            onToggleMute={toggleMute}
           />
 
           {showQuiz && lesson.quiz && lesson.quiz.length > 0 && (

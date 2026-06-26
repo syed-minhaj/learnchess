@@ -17,6 +17,8 @@ type LessonPanelProps = {
   quizScore?: number;
   userExplanation?: string | null;
   botExplanation?: string | null;
+  isMuted?: boolean;
+  onToggleMute?: () => void;
 };
 
 export default function LessonPanel({
@@ -31,6 +33,8 @@ export default function LessonPanel({
   quizScore,
   userExplanation,
   botExplanation,
+  isMuted,
+  onToggleMute,
 }: LessonPanelProps) {
 
   return (
@@ -79,14 +83,20 @@ export default function LessonPanel({
 
       {userExplanation && (
         <div className="rounded-[12px] border border-accent/20 bg-accent/10 p-3">
-          <p className="text-xs font-medium text-accent">Your move</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-accent">Your move</p>
+            <SpeakerButton isMuted={isMuted} onToggle={onToggleMute} />
+          </div>
           <p className="mt-0.5 text-sm text-fg">{userExplanation}</p>
         </div>
       )}
 
       {botExplanation && (
         <div className="rounded-[12px] border border-accent/20 bg-accent/5 p-3">
-          <p className="text-xs font-medium text-accent">Coach</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-accent">Coach</p>
+            <SpeakerButton isMuted={isMuted} onToggle={onToggleMute} />
+          </div>
           <p className="mt-0.5 text-sm text-fg">{botExplanation}</p>
         </div>
       )}
@@ -121,5 +131,30 @@ export default function LessonPanel({
         <MoveHistory moves={moves} />
       </div>
     </div>
+  );
+}
+
+function SpeakerButton({ isMuted, onToggle }: { isMuted?: boolean; onToggle?: () => void }) {
+  if (!onToggle) return null;
+  return (
+    <button
+      onClick={onToggle}
+      className="flex h-6 w-6 items-center justify-center rounded text-muted hover:text-fg transition-colors"
+      aria-label={isMuted ? 'Unmute voice' : 'Mute voice'}
+    >
+      {isMuted ? (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <line x1="23" y1="9" x2="17" y2="15" />
+          <line x1="17" y1="9" x2="23" y2="15" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+          <path d="M11 5L6 9H2v6h4l5 4V5z" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+        </svg>
+      )}
+    </button>
   );
 }
