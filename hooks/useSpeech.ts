@@ -8,6 +8,7 @@ export function useSpeech() {
   const isSpeakingRef = useRef(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const mountedRef = useRef(true);
+  const genRef = useRef(0);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -27,29 +28,56 @@ export function useSpeech() {
       isSpeakingRef.current = true;
       setIsSpeaking(true);
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      utterance.volume = 1;
+      const cleaned = text
+        .replace(/!!/g, '__DBL__')
+        .replace(/#/g, '... checkmate')
+        .replace(/!/g, ',')
+        .replace(/__DBL__/g, ' \u2014 brilliant!');
+
+      const gen = ++genRef.current;
 
       const voices = window.speechSynthesis.getVoices();
       const englishVoice = voices.find(
         (v) => v.lang.startsWith('en') && v.name.toLowerCase().includes('female')
       ) || voices.find((v) => v.lang.startsWith('en'));
 
-      if (englishVoice) utterance.voice = englishVoice;
+      const words = cleaned.split(/\s+/).filter(Boolean);
+      const chunkSize = 6;
+      const chunks: string[] = [];
+      for (let i = 0; i < words.length; i += chunkSize) {
+        chunks.push(words.slice(i, i + chunkSize).join(' '));
+      }
 
-      utterance.onend = () => {
-        isSpeakingRef.current = false;
-        if (mountedRef.current) setIsSpeaking(false);
-      };
-      utterance.onerror = () => {
-        isSpeakingRef.current = false;
-        if (mountedRef.current) setIsSpeaking(false);
+      const speakChunk = (index: number) => {
+        if (!mountedRef.current || !isSpeakingRef.current) return;
+
+        const utterance = new SpeechSynthesisUtterance(chunks[index]);
+        utterance.rate = 1;
+        utterance.pitch = 1 + (Math.random() - 0.5) * 0.15;
+        utterance.volume = 1;
+
+        if (englishVoice) utterance.voice = englishVoice;
+
+        utterance.onend = () => {
+          if (genRef.current !== gen) return;
+          if (index + 1 < chunks.length) {
+            speakChunk(index + 1);
+          } else {
+            isSpeakingRef.current = false;
+            if (mountedRef.current) setIsSpeaking(false);
+          }
+        };
+        utterance.onerror = () => {
+          if (genRef.current !== gen) return;
+          isSpeakingRef.current = false;
+          if (mountedRef.current) setIsSpeaking(false);
+        };
+
+        utteranceRef.current = utterance;
+        window.speechSynthesis.speak(utterance);
       };
 
-      utteranceRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
+      speakChunk(0);
     },
     [isMuted]
   );

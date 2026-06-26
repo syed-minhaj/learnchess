@@ -61,6 +61,14 @@ export default function LessonPage() {
   }, [lesson]);
 
   useEffect(() => {
+    if (userExplanation && !isMuted) speak(userExplanation);
+  }, [userExplanation]);
+
+  useEffect(() => {
+    if (botExplanation && !isMuted) speak(botExplanation);
+  }, [botExplanation]);
+
+  useEffect(() => {
     if (!lesson || !game || isUserTurn || isComplete) return;
 
     if (isSpeakingRef.current) return;
@@ -168,14 +176,6 @@ export default function LessonPage() {
     },
     [lessonId]
   );
-
-  useEffect(() => {
-    if (botExplanation && !isMuted) speak(botExplanation);
-  }, [botExplanation]);
-
-  useEffect(() => {
-    if (userExplanation && !isMuted) speak(userExplanation);
-  }, [userExplanation]);
 
   const nextLesson = useMemo(() => {
     if (!lesson) return null;
