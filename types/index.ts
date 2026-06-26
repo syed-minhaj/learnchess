@@ -20,6 +20,20 @@ export interface QuizQuestion {
   explanation: string;
 }
 
+export interface TestNode {
+  userMove: string;
+  botResponse?: string;
+  comment?: string;
+  children?: TestNode[];
+}
+
+export interface TestScenario {
+  fen: string;
+  userColor: PieceColor;
+  prompt: string;
+  root: TestNode[];
+}
+
 export interface Lesson {
   id: string;
   sectionId: string;
@@ -32,6 +46,7 @@ export interface Lesson {
   alternatives?: AlternativeLine[];
   estimatedMinutes: number;
   quiz?: QuizQuestion[];
+  test?: TestScenario;
 }
 
 export interface Section {
@@ -47,6 +62,7 @@ export interface UserProgress {
   currentLessonId: string | null;
   lessonMovesPlayed: Record<string, number>;
   quizScores: Record<string, number>;
+  passedTests: string[];
 }
 
 export interface MoveRecord {

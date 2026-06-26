@@ -5,12 +5,12 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Chess } from 'chess.js';
 import { sections } from '@/data/sections';
-import { getLessonById } from '@/data/registry';
+import { getLessonById, getTestForLesson } from '@/data/registry';
 import { MoveRecord } from '@/types';
 import ChessBoard from '@/components/ChessBoard';
 import LessonPanel from '@/components/LessonPanel';
 import QuizPanel from '@/components/QuizPanel';
-import { loadProgress, completeLesson, setCurrentLesson } from '@/lib/store';
+import { loadProgress, completeLesson, setCurrentLesson, hasPassedTest } from '@/lib/store';
 import { useSpeech } from '@/hooks/useSpeech';
 
 export default function LessonPage() {
@@ -33,6 +33,7 @@ export default function LessonPage() {
   const [userExplanation, setUserExplanation] = useState<string | null>(null);
   const [botExplanation, setBotExplanation] = useState<string | null>(null);
   const [quizScore, setQuizScore] = useState<number | undefined>(undefined);
+  const [testPassed, setTestPassed] = useState(false);
 
   const gameRef = useRef<Chess | null>(null);
 
@@ -58,6 +59,7 @@ export default function LessonPage() {
     setIsUserTurn(initialUserTurn);
     setHint(!initialUserTurn ? null : lesson.mainLine[0]?.hint || null);
     setQuizScore(loadProgress().quizScores[lesson.id]);
+    setTestPassed(hasPassedTest(lesson.id));
   }, [lesson]);
 
   useEffect(() => {
@@ -250,6 +252,8 @@ export default function LessonPage() {
             onRequestHint={handleHint}
             onNextLesson={nextLesson ? () => router.push(nextLesson) : null}
             onShowQuiz={lesson.quiz && lesson.quiz.length > 0 ? () => setShowQuiz(true) : undefined}
+            onShowTest={getTestForLesson(lesson.id) ? () => router.push(`/roadmap/${lesson.id}/test`) : undefined}
+            testPassed={testPassed}
             quizScore={quizScore !== null ? quizScore : undefined}
             userExplanation={userExplanation}
             botExplanation={botExplanation}

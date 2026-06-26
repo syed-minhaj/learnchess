@@ -14,6 +14,8 @@ type LessonPanelProps = {
   onRequestHint: () => void;
   onNextLesson: (() => void) | null;
   onShowQuiz?: () => void;
+  onShowTest?: () => void;
+  testPassed?: boolean;
   quizScore?: number;
   userExplanation?: string | null;
   botExplanation?: string | null;
@@ -30,6 +32,8 @@ export default function LessonPanel({
   onRequestHint,
   onNextLesson,
   onShowQuiz,
+  onShowTest,
+  testPassed,
   quizScore,
   userExplanation,
   botExplanation,
@@ -57,6 +61,21 @@ export default function LessonPanel({
             You played through {moves.length} move{moves.length !== 1 ? 's' : ''}.
           </p>
 
+          {onShowTest && !testPassed && (
+            <Button
+              onClick={onShowTest}
+              className="mt-4 w-full py-3 text-base font-semibold"
+            >
+              Take Test 🎯
+            </Button>
+          )}
+
+          {testPassed && (
+            <div className="mt-4 rounded-[12px] border border-success/30 bg-success/5 p-3 text-center">
+              <p className="text-base font-semibold text-success">Test Passed ✅</p>
+            </div>
+          )}
+
           {quizScore !== undefined && (
             <p className="mt-1 text-sm text-warn">
               Quiz: {quizScore}/{lesson.quiz?.length || 0}
@@ -70,13 +89,13 @@ export default function LessonPanel({
           )}
 
           {onNextLesson && (
-            <Button onClick={onNextLesson} className="mt-2">
+            <Button onClick={onNextLesson} className="mt-3 w-full py-3 text-base font-semibold">
               Next Lesson →
             </Button>
           )}
 
           {!onNextLesson && (
-            <p className="mt-2 text-xs text-muted">This is the last lesson in this section.</p>
+            <p className="mt-2 text-xs text-muted">This is the last lesson.</p>
           )}
         </div>
       )}

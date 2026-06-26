@@ -1,4 +1,4 @@
-import { Lesson } from '@/types';
+import { Lesson, TestScenario } from '@/types';
 import { openingLessons } from './openings';
 import { tacticLessons } from './tactics';
 import { middlegameLessons } from './middlegame';
@@ -7,6 +7,7 @@ import { checkmateLessons } from './checkmates';
 import { famousGameLessons } from './famous-games';
 import { pawnStructureLessons } from './pawn-structures';
 import { defenseLessons } from './defense';
+import { testData } from './tests';
 
 const registry: Record<string, Lesson[]> = {
   openings: openingLessons,
@@ -33,4 +34,15 @@ export function getLessonById(id: string): Lesson | undefined {
 
 export function getSectionLessons(sectionId: string): Lesson[] {
   return registry[sectionId] || [];
+}
+
+export function getTestForLesson(lessonId: string): TestScenario | undefined {
+  return testData[lessonId];
+}
+
+export function getNextLessonId(lessonId: string): string | null {
+  const ordered = getAllLessons();
+  const idx = ordered.findIndex((l) => l.id === lessonId);
+  if (idx < 0 || idx >= ordered.length - 1) return null;
+  return ordered[idx + 1].id;
 }

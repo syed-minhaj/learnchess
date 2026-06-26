@@ -9,6 +9,7 @@ export const defaultProgress: UserProgress = {
   currentLessonId: null,
   lessonMovesPlayed: {},
   quizScores: {},
+  passedTests: [],
 };
 
 export function loadProgress(): UserProgress {
@@ -53,6 +54,18 @@ export function updateMovesPlayed(lessonId: string, moves: number): void {
   const progress = loadProgress();
   progress.lessonMovesPlayed[lessonId] = moves;
   saveProgress(progress);
+}
+
+export function passTest(lessonId: string): void {
+  const progress = loadProgress();
+  if (!progress.passedTests.includes(lessonId)) {
+    progress.passedTests.push(lessonId);
+  }
+  saveProgress(progress);
+}
+
+export function hasPassedTest(lessonId: string): boolean {
+  return loadProgress().passedTests.includes(lessonId);
 }
 
 export function clearProgress(): void {
