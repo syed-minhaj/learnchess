@@ -12,15 +12,19 @@ export const defaultProgress: UserProgress = {
   passedTests: [],
 };
 
+function cloneProgress(p: UserProgress): UserProgress {
+  return JSON.parse(JSON.stringify(p));
+}
+
 export function loadProgress(): UserProgress {
-  if (typeof window === 'undefined') return defaultProgress;
+  if (typeof window === 'undefined') return cloneProgress(defaultProgress);
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return defaultProgress;
+    if (!raw) return cloneProgress(defaultProgress);
     const parsed = JSON.parse(raw);
-    return { ...defaultProgress, ...parsed, quizScores: parsed.quizScores || {} };
+    return { ...cloneProgress(defaultProgress), ...parsed, quizScores: parsed.quizScores || {} };
   } catch {
-    return defaultProgress;
+    return cloneProgress(defaultProgress);
   }
 }
 

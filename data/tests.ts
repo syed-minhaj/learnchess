@@ -195,13 +195,13 @@ export const testData: Record<string, TestScenario> = {
     ],
   },
   'game-of-the-century': {
-    fen: '1Q6/5pk1/2p3p1/1p2N2p/1b5P/1b4n1/r5P1/3K4 w - - 10 39',
+    fen: '1Q6/5pk1/2p3p1/1p2N2p/1b5P/1b4n1/r5P1/2K5 b - - 11 39',
     userColor: 'b',
     prompt: 'Find the best move in this position.',
     root: [
-      {       userMove: 'Kc1', botResponse: 'Ne2+', comment: '39.Kc1 — almost trapped.' },
-      {       userMove: 'Kb1', botResponse: 'Nc3+', comment: '40.Kb1 — one more square.' },
-      {       userMove: 'Kc1', botResponse: 'Rc2#', comment: '41.Kc1 — back to c1.' },
+      {       userMove: 'Ne2+', botResponse: 'Kb1', comment: '39...Ne2+ — check!' },
+      {       userMove: 'Nc3+', botResponse: 'Kc1', comment: '40...Nc3+ — check!' },
+      {       userMove: 'Rc2#', comment: '41...Rc2# — checkmate! Fischer delivers mate with the rook.' },
     ],
   },
   'deep-blue-kasparov': {

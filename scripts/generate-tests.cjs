@@ -125,8 +125,10 @@ for (const lesson of allLessons) {
   }
 
   const userIndices = [];
-  for (let i = 0; i < lesson.moves.length; i += 2) {
-    userIndices.push(i);
+  const sim = new Chess(lesson.fen);
+  for (let i = 0; i < lesson.moves.length; i++) {
+    if (sim.turn() === lesson.color) userIndices.push(i);
+    sim.move(lesson.moves[i].san);
   }
 
   const lastUserIndices = userIndices.slice(-3);
